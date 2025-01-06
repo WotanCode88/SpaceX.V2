@@ -1,20 +1,30 @@
 import UIKit
+import SnapKit
 
 final class PageViewController: UIPageViewController {
     
-    let falconHeavy = RocketViewController(nameOfRocket: "Falcon Heavy", nameOfImage: "FalconHeavy")
-    let falcon9 = RocketViewController(nameOfRocket: "Falcon 9", nameOfImage: "falcon9")
-    let falcon1 = RocketViewController(nameOfRocket: "Falcon 1", nameOfImage: "Falcon1")
-    let starShip = RocketViewController(nameOfRocket: "Starship", nameOfImage: "starship")
+    private let api = RocketsAPI()
+    private var rockets: [RocketsModel] = []
+    
+    private func loadData() {
+        api.getData { [weak self] (rockets: [RocketsModel]) in
+            guard let self = self else { return }
+            if rockets.isEmpty { return }
+            
+            self.rockets = rockets
+            
+            let rocketNames = self.rockets.map { $0.name }
+            self.pages = rocketNames.map { name in
+                return RocketViewController(rocketName: name)
+            }
+            
+            self.setupPageControl()
+            self.setViewControllers([self.pages[0]], direction: .forward, animated: true)
+        }
+    }
     
     // MARK: - Pages
-    private lazy var pages: [UIViewController] = [
-//        Test(),
-        falconHeavy,
-        falcon9,
-        falcon1,
-        starShip
-    ]
+    private var pages: [UIViewController] = []
     
     private let pageControl = UIPageControl()
     
@@ -34,11 +44,10 @@ final class PageViewController: UIPageViewController {
         super.viewDidLoad()
         view.backgroundColor = .black
         
-        setupPageControl()
-        setViewControllers([pages[0]], direction: .forward, animated: true)
+        loadData()
         
         let backButton = UIBarButtonItem()
-        backButton.title = "Назад" // Новый текст для кнопки
+        backButton.title = "Назад"
         navigationItem.backBarButtonItem = backButton
     }
     
@@ -52,10 +61,10 @@ final class PageViewController: UIPageViewController {
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(pageControl)
 
-        NSLayoutConstraint.activate([
-            pageControl.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            pageControl.centerXAnchor.constraint(equalTo: view.centerXAnchor)
-        ])
+        pageControl.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            make.centerX.equalTo(view.snp.centerX)
+        }
     }
 }
 

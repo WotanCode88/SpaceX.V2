@@ -17,16 +17,11 @@ final class RocketViewController: UIViewController {
         view.layer.cornerRadius = 50
         return view
     }()
-    
-    private let nameOfImage: String
         
     private lazy var img: UIImageView = {
         let img = UIImageView()
-        if let image = UIImage(named: nameOfImage) {
+        if let image = UIImage(named: rocketName) {
             img.image = image
-        } else {
-            // Если изображение с таким именем не найдено, используйте изображение по умолчанию
-            img.image = UIImage(named: "defaultImageName") // Имя изображения по умолчанию
         }
         img.contentMode = .scaleAspectFill
         img.clipsToBounds = true
@@ -55,9 +50,8 @@ final class RocketViewController: UIViewController {
      
     let rocketLaunchButton = RocketLaunchButton()
     
-    init (nameOfRocket: String, nameOfImage: String) {
-        self.rocketName = nameOfRocket
-        self.nameOfImage = nameOfImage
+    init (rocketName: String) {
+        self.rocketName = rocketName
         
         super.init(nibName: nil, bundle: nil)
     }
