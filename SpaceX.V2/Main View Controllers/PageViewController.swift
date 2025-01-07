@@ -3,23 +3,19 @@ import SnapKit
 
 final class PageViewController: UIPageViewController {
     
-    private let api = RocketsAPI()
-    private var rockets: [RocketsModel] = []
-    
     private func loadData() {
-        api.getData { [weak self] (rockets: [RocketsModel]) in
+        RocketsDataManager.shared.fetchRockets { [weak self] rockets in
             guard let self = self else { return }
-            if rockets.isEmpty { return }
             
-            self.rockets = rockets
-            
-            let rocketNames = self.rockets.map { $0.name }
+            let rocketNames = rockets.map { $0.name }
             self.pages = rocketNames.map { name in
                 return RocketViewController(rocketName: name)
             }
             
-            self.setupPageControl()
-            self.setViewControllers([self.pages[0]], direction: .forward, animated: true)
+            DispatchQueue.main.async {
+                self.setupPageControl()
+                self.setViewControllers([self.pages[0]], direction: .forward, animated: true)
+            }
         }
     }
     

@@ -131,10 +131,8 @@ final class RocketViewController: UIViewController {
     private var horizontalView: HorizontalView!
 
     private func createHorizontalView() {
-        // Убедитесь, что если существует старое представление, оно будет удалено
         horizontalView?.removeFromSuperview()
 
-        // Создайте новый HorizontalView и добавьте его в иерархию представлений
         horizontalView = HorizontalView(rocketName: rocketName)
         horizontalView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(horizontalView)
@@ -151,24 +149,24 @@ final class RocketViewController: UIViewController {
         }
     }
 
-    
-    private lazy var allInfoView = BlockOfInfoView(nameOfRocket: rocketName)
-    
     //MARK: - setupSecondContent
+    lazy var rocketInfoViewController = RocketInfoTableViewController(rocketName: rocketName)
 
     private func setupSecondContent() {
-        contentView.addSubview(allInfoView)
+        contentView.addSubview(rocketInfoViewController.tableView)
         contentView.addSubview(rocketLaunchButton)
         
-        allInfoView.snp.makeConstraints { make in
-            make.top.equalTo(titleOfPage.snp.bottom).offset(140)
+        rocketInfoViewController.tableView.snp.makeConstraints { make in
+            make.top.equalTo(titleOfPage.snp.bottom).offset(160)
             make.leading.equalTo(contentView.snp.leading)
             make.trailing.equalTo(contentView.snp.trailing)
+            make.bottom.equalTo(rocketLaunchButton.snp.top).offset(-5)
         }
         
         rocketLaunchButton.snp.makeConstraints { make in
             make.centerX.equalTo(contentView.snp.centerX)
-            make.top.equalTo(allInfoView.snp.bottom).offset(20)
+            make.bottom.equalTo(contentView.safeAreaLayoutGuide.snp.bottom).offset(-60)
         }
     }
+
 }

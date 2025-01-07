@@ -82,13 +82,10 @@ final class HorizontalView: UIView {
 
     // MARK: - Загрузка данных
     private func loadData() {
-        api.getData { [weak self] (rockets: [RocketsModel]) in
+        RocketsDataManager.shared.fetchRockets { [weak self] rockets in
             guard let self = self else { return }
-            if rockets.isEmpty { return }
-
             self.rockets = rockets
 
-            // Обновляем UI после загрузки данных
             if let theRocket = rockets.first(where: { $0.name == self.rocketName }) {
                 DispatchQueue.main.async {
                     self.updateUIForRocket(theRocket)
