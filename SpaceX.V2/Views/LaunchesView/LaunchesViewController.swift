@@ -93,7 +93,7 @@ final class LaunchesViewController: UIViewController {
         ])
     }
 
-    // Функция для загрузки данных о запусках
+
     private func fetchLaunches(forRocket rocketName: String) {
         let urlString = "https://api.spacexdata.com/v4/launches/past"
         guard let url = URL(string: urlString) else { return }

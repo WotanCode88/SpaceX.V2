@@ -22,8 +22,6 @@ final class HorizontalView: UIView {
         set { UserDefaults.standard.set(newValue, forKey: "isOn4") }
     }
 
-    // Данные ракет
-    private let api = RocketsAPI()
     private var rockets: [RocketsModel] = []
 
     // MARK: - Инициализация
